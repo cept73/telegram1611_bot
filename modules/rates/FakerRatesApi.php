@@ -1,8 +1,6 @@
 <?php /** @noinspection PhpUnused */
 
-namespace app\rates;
-
-use app\modules\rates\RatesServerInterface;
+namespace app\modules\rates;
 
 class FakerRatesApi implements RatesServerInterface
 {

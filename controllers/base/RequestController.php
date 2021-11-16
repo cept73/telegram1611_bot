@@ -5,7 +5,7 @@ namespace app\controllers\base;
 use app\models\Telegram;
 use app\modules\chat\ChatService;
 use app\modules\rates\RatesServerInterface;
-use app\rates\FakerRatesApi;
+use app\modules\rates\FakerRatesApi;
 use Exception;
 use Yii;
 use yii\base\InvalidConfigException;
