@@ -4,6 +4,8 @@ namespace app\controllers\base;
 
 use app\models\Telegram;
 use app\modules\chat\ChatService;
+use app\modules\rates\RatesServerInterface;
+use app\rates\FakerRatesApi;
 use Exception;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -23,6 +25,9 @@ class RequestController extends Controller
     /** @var ChatService */
     public $chatService;
 
+    /** @var RatesServerInterface */
+    public $ratesService;
+
     /**
      * RequestController constructor
      *
@@ -37,6 +42,7 @@ class RequestController extends Controller
 
         $this->telegram     = Yii::$app->get('telegram');
         $this->chatService  = Yii::createObject(ChatService::class);
+        $this->ratesService = Yii::createObject(FakerRatesApi::class);
     }
 
     /**

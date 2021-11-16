@@ -8,7 +8,7 @@ use JsonException;
 class RequestController extends base\RequestController
 {
     /** @var string[] */
-    public $commandsList = ['help', 'list', 'lst', 'exchange', 'history'];
+    public $commandsList = ['start', 'help', 'list', 'lst', 'exchange', 'history'];
 
     /**
      * Start page return empty
@@ -16,6 +16,14 @@ class RequestController extends base\RequestController
     public function actionIndex(): string
     {
         return '';
+    }
+
+    /**
+     * @throws JsonException
+     */
+    public function actionStart(): void
+    {
+        $this->commandHelp();
     }
 
     /**
@@ -31,7 +39,7 @@ class RequestController extends base\RequestController
      */
     public function commandList(): void
     {
-        $ratesList = '1234';
+        $ratesList = $this->ratesService->getList();
 
         $this->chatService->sendMessageOrNothing($ratesList);
     }
@@ -52,7 +60,11 @@ class RequestController extends base\RequestController
      */
     public function commandExchange($params, $isAdmin): void
     {
-        $this->chatService->sendMessageOrNothing(Chat::TEXT_HELP);
+        $from = 'CAD';
+        $to = 'USD';
+        $ratesList = $this->ratesService->getExchange($from, $to);
+
+        $this->chatService->sendMessageOrNothing($ratesList);
     }
 
     /**
@@ -63,6 +75,11 @@ class RequestController extends base\RequestController
      */
     public function commandHistory($params, $isAdmin): void
     {
-        $this->chatService->sendMessageOrNothing(Chat::TEXT_HELP);
+        $from = 'CAD';
+        $to = 'USD';
+        $period = '7 days';
+        $history = $this->ratesService->getHistory($from, $to, $period);
+
+        $this->chatService->sendMessageOrNothing($history);
     }
 }
