@@ -19,6 +19,6 @@ class FakerRatesApi implements RatesServerInterface
 
     public function getHistory($from, $to, $period): string
     {
-        return '';
+        return 'no history';
     }
 }

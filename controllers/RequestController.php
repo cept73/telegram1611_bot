@@ -40,8 +40,9 @@ class RequestController extends base\RequestController
     public function commandList(): void
     {
         $ratesList = $this->ratesService->getList();
+        $ratesString = json_encode($ratesList, JSON_THROW_ON_ERROR);
 
-        $this->chatService->sendMessageOrNothing(json_encode($ratesList));
+        $this->chatService->sendMessageOrNothing($ratesString);
     }
 
     /**
