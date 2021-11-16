@@ -5,11 +5,7 @@ namespace app\modules\chat;
 use app\models\Chat;
 use app\models\Telegram\Telegram;
 use app\models\User;
-use app\modules\listing\ListingRepository;
-use app\modules\listing\ListingSerializer;
-use app\modules\listing\ListingService;
 use app\modules\user\UserService;
-use Exception;
 use JsonException;
 use Yii;
 use yii\base\BaseObject;
@@ -31,19 +27,13 @@ class ChatService extends BaseObject
     /** @var Telegram */
     private $telegram;
 
-    /** @var ListingService */
-    private $listingService;
-
     /**
      * ChatService constructor.
-     * @param ListingService $listingService
      * @throws InvalidConfigException
      */
-    public function __construct(ListingService $listingService)
+    public function __construct()
     {
         parent::__construct();
-
-        $this->listingService = $listingService;
 
         $this->telegram = Yii::$app->get('telegram');
         $currentChat    = $this->getCurrentChat();
@@ -57,66 +47,30 @@ class ChatService extends BaseObject
     }
 
     /**
-     * @param $ticker
-     * @param bool $isAdmin
-     * @return bool
-     * @throws InvalidConfigException
-     * @throws JsonException
-     * @noinspection PhpUnusedParameterInspection
-     */
-    public function executeStartCommandWithTicker($ticker, $isAdmin = false): bool
-    {
-        if ($ticker) {
-            $this->sendTickerInfo($ticker);
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * @param false $isAdmin
-     * @throws InvalidConfigException
      * @throws JsonException
      */
-    public function onReceivedMessage($isAdmin = false): void
+    public function onReceivedMessage(bool $isAdmin = false): void
     {
         $messageText        = $this->telegram->input->message->text ?? null;
-        $uploadedFileUrl    = $this->listingService->getUploadedFileUrl();
+        $uploadedFileUrl    = $this->telegram->getUploadedFileUrl();
 
-        if ($uploadedFileUrl) {
-            if (!$isAdmin) {
-                Yii::error('Unauthorized file');
-                return;
-            }
-
-	    set_time_limit(10 * 60);
-            try {
-                $this->sendMessageOrNothing(Chat::TEXT_LIST_SAVING);
-                $this->listingService->parseFromUrl($uploadedFileUrl);
-                $this->sendMessageOrNothing(Chat::TEXT_LIST_SAVED);
-            } catch (Exception $ex) {
-                Yii::error($ex->getMessage());
-                $this->sendMessageOrNothing(Chat::TEXT_LIST_SAVE_FAIL);
-            }
+        if ($uploadedFileUrl && !$isAdmin) {
+            Yii::error('Unauthorized file');
+            return;
         }
 
         if ($messageText) {
-            $this->sendTickerInfo($messageText);
+            $this->sendInfo($messageText);
         }
     }
 
     /**
-     * @param $ticker
-     * @throws InvalidConfigException
      * @throws JsonException
      */
-    public function sendTickerInfo($ticker): void
+    public function sendInfo($message): void
     {
-        $listingRepository = Yii::createObject(ListingRepository::class);
-	    $listingResults = $listingRepository->searchByTicker($ticker);
-        $info = ListingSerializer::getInfo($listingResults);
-        $this->sendMessageOrNothing($info);
+        $this->sendMessageOrNothing($message);
     }
 
     /**

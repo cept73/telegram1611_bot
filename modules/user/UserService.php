@@ -25,8 +25,8 @@ class UserService extends BaseObject
         if (!$currentUser) {
             $userFactory = Yii::createObject(UserFactory::class);
             $currentUser = $userFactory->createByTelegramChat($chat);
-        } elseif (self::isUserChanged($currentUser, $chat)) {
-            $currentUser->setUserInfo($chat);
+        } elseif (self::isUserChangedInChat($currentUser, $chat)) {
+            $currentUser->setUserInfoFromChat($chat);
 	        $currentUser->setUpdatedAt();
             $currentUser->save();
         }
@@ -34,7 +34,7 @@ class UserService extends BaseObject
         return $currentUser;
     }
 
-    public static function isUserChanged($user, $chat): bool
+    public static function isUserChangedInChat($user, $chat): bool
     {
         $attributes = ['username', 'first_name', 'last_name'];
         foreach ($attributes as $attr) {

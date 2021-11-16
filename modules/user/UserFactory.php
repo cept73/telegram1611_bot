@@ -11,10 +11,9 @@ class UserFactory extends BaseObject
     {
         $user = new User();
         $user->setId($chat->id);
-        $user->setUserInfo($chat);
+        $user->setUserInfoFromChat($chat);
         $user->setCreatedAt();
         $user->setUpdatedAt();
-
         $user->save();
 
         return $user;
