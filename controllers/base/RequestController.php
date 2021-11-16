@@ -42,7 +42,7 @@ class RequestController extends Controller
 
         $this->telegram     = Yii::$app->get('telegram');
         $this->chatService  = Yii::createObject(ChatService::class);
-        $this->ratesService = Yii::createObject(FakerRatesApi::class);
+        $this->ratesService = new FakerRatesApi();
     }
 
     /**

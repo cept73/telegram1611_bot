@@ -21,7 +21,7 @@ class RequestController extends base\RequestController
     /**
      * @throws JsonException
      */
-    public function actionStart(): void
+    public function commandStart(): void
     {
         $this->commandHelp();
     }
@@ -41,7 +41,7 @@ class RequestController extends base\RequestController
     {
         $ratesList = $this->ratesService->getList();
 
-        $this->chatService->sendMessageOrNothing($ratesList);
+        $this->chatService->sendMessageOrNothing(json_encode($ratesList));
     }
 
     /**
