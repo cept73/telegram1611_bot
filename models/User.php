@@ -13,10 +13,10 @@ use yii\db\Expression;
  * @property $first_name
  * @property $last_name
  * @property $username
- * @property $current_doc
- * @property $created_at
- * @property null|string $currentDocumentId
+ * @property $last_request
  * @property-write mixed $userInfo
+ * @property-write mixed $userInfoFromChat
+ * @property $created_at
  * @property $updated_at
  */
 class User extends ActiveRecord
@@ -36,7 +36,7 @@ class User extends ActiveRecord
         $this->setAttribute('id', $id);
     }
 
-    public function setUserInfo($chat): void
+    public function setUserInfoFromChat($chat): void
     {
         $this->setAttribute('username', $chat->username);
         $this->setAttribute('first_name', $chat->first_name);
