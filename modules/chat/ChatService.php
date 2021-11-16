@@ -28,7 +28,7 @@ class ChatService extends BaseObject
     private $telegram;
 
     /**
-     * ChatService constructor.
+     * ChatService constructor
      * @throws InvalidConfigException
      */
     public function __construct()
@@ -36,14 +36,9 @@ class ChatService extends BaseObject
         parent::__construct();
 
         $this->telegram = Yii::$app->get('telegram');
-        $currentChat    = $this->getCurrentChat();
+        $currentChat    = $this->telegram->getCurrentChat();
         $this->chatId   = $currentChat->id ?? null;
         $this->user     = UserService::getOrCreateUserByChat($currentChat);
-    }
-
-    public function getCurrentChat()
-    {
-        return $this->telegram->input->message->chat ?? null;
     }
 
     /**
@@ -52,7 +47,7 @@ class ChatService extends BaseObject
      */
     public function onReceivedMessage(bool $isAdmin = false): void
     {
-        $messageText        = $this->telegram->input->message->text ?? null;
+        $messageText        = $this->telegram->getCurrentMessage();
         $uploadedFileUrl    = $this->telegram->getUploadedFileUrl();
 
         if ($uploadedFileUrl && !$isAdmin) {

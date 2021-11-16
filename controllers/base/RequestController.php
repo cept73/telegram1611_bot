@@ -1,8 +1,4 @@
-<?php
-
-/** @noinspection SpellCheckingInspection */
-/** @noinspection PhpMissingFieldTypeInspection */
-/** @noinspection PhpUnused */
+<?php /** @noinspection SpellCheckingInspection, PhpMissingFieldTypeInspection, PhpUnused */
 
 namespace app\controllers\base;
 
@@ -19,7 +15,7 @@ class RequestController extends Controller
     public $enableCsrfValidation = false;
 
     /** @var string[] */
-    public const COMMANDS_LIST = [];
+    public $commandsList = [];
 
     /** @var Telegram\Telegram */
     public $telegram;
@@ -29,6 +25,7 @@ class RequestController extends Controller
 
     /**
      * RequestController constructor
+     *
      * @param $id
      * @param $module
      * @param array $config
@@ -52,7 +49,7 @@ class RequestController extends Controller
         $adminsList = Yii::$app->params['admins'] ?? [];
         $isAdmin    = in_array($chatId, $adminsList, true);
 
-        foreach (self::COMMANDS_LIST as $command) {
+        foreach ($this->commandsList as $command) {
             if (strpos($messageTxt, "/$command") === 0) {
                 $methodName = 'command' . ucfirst($command);
                 $params = $this->getParamsFromMessageText($command, $messageTxt);

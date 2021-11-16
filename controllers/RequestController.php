@@ -3,17 +3,12 @@
 namespace app\controllers;
 
 use app\models\Chat;
-use app\modules\chat\ChatService;
-use app\modules\listing\ListingRepository;
-use app\modules\listing\ListingSerializer;
 use JsonException;
-use Yii;
-use yii\base\InvalidConfigException;
 
 class RequestController extends base\RequestController
 {
     /** @var string[] */
-    public const COMMANDS_LIST = ['help', 'list', 'lst', 'exchange', 'history'];
+    public $commandsList = ['help', 'list', 'lst', 'exchange', 'history'];
 
     /**
      * Start page return empty

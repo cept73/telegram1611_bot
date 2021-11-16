@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnused */
 
 namespace app\models\Telegram;
 
@@ -7,6 +7,8 @@ use JsonException;
 
 /**
  * @property-read null|string $uploadedFileUrl
+ * @property-read null $currentChat
+ * @property-read null $currentMessage
  * @property-read Input $input
  */
 class Telegram extends \aki\telegram\Telegram
@@ -34,6 +36,16 @@ class Telegram extends \aki\telegram\Telegram
         }
 
         return $this->_input;
+    }
+
+    public function getCurrentChat()
+    {
+        return $this->input->message->chat ?? null;
+    }
+
+    public function getCurrentMessage()
+    {
+        return $this->input->message->text ?? null;
     }
 
     public function getUploadedFileUrl(): ?string
